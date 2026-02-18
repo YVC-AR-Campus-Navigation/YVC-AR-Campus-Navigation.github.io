@@ -1,11 +1,32 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>YVC AR Test</title>
-</head>
-<body style="font-family: Arial; text-align:center; margin-top:40px;">
-  <h1>YVC AR Site Is Working ✅</h1>
-  <p>If you see this, GitHub Pages is configured correctly.</p>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YVC Camera Test</title>
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; }
+      .bar {
+        position: fixed; left: 0; right: 0; top: 0;
+        padding: 10px 12px; font-family: Arial;
+        background: rgba(0,0,0,0.6); color: white;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="bar">Camera Test: if you see the camera view on iPhone Safari, you're good ✅</div>
+
+    <a-scene embedded vr-mode-ui="enabled: false">
+      <a-camera
+        position="0 0 0"
+        look-controls="enabled: false"
+        wasd-controls="enabled: false"
+      ></a-camera>
+    </a-scene>
+  </body>
 </html>
