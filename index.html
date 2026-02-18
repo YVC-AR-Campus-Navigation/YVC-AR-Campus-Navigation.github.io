@@ -1,32 +1,51 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>YVC Camera Test</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YVC Camera Test (Direct)</title>
+  <style>
+    html, body { margin:0; height:100%; background:#000; }
+    #msg {
+      position: fixed; top:0; left:0; right:0;
+      padding:10px 12px;
+      font-family: Arial, system-ui;
+      background: rgba(0,0,0,0.6);
+      color:#fff; z-index: 10;
+    }
+    video { width:100%; height:100%; object-fit: cover; }
+    button {
+      position: fixed; bottom:16px; left:16px; z-index: 10;
+      padding:12px 14px; font-size:16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="msg">Tap “Start Camera”. If you get a prompt, tap Allow.</div>
+  <button id="btn">Start Camera</button>
+  <video id="v" playsinline autoplay muted></video>
 
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script>
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('btn');
+    const video = document.getElementById('v');
 
-    <style>
-      html, body { margin: 0; height: 100%; overflow: hidden; }
-      .bar {
-        position: fixed; left: 0; right: 0; top: 0;
-        padding: 10px 12px; font-family: Arial;
-        background: rgba(0,0,0,0.6); color: white;
-        z-index: 9999;
+    async function start() {
+      try {
+        msg.textContent = "Requesting camera…";
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "environment" },
+          audio: false
+        });
+        video.srcObject = stream;
+        msg.textContent = "Camera is LIVE ✅";
+        btn.style.display = "none";
+      } catch (e) {
+        msg.textContent = "Camera FAILED ❌  " + (e && e.message ? e.message : e);
       }
-    </style>
-  </head>
+    }
 
-  <body>
-    <div class="bar">Camera Test: if you see the camera view on iPhone Safari, you're good ✅</div>
-
-    <a-scene embedded vr-mode-ui="enabled: false">
-      <a-camera
-        position="0 0 0"
-        look-controls="enabled: false"
-        wasd-controls="enabled: false"
-      ></a-camera>
-    </a-scene>
-  </body>
+    btn.addEventListener('click', start);
+  </script>
+</body>
 </html>
