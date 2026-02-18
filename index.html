@@ -2,50 +2,59 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>YVC Camera Test (Direct)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>YVC MindAR Test</title>
+
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
   <style>
-    html, body { margin:0; height:100%; background:#000; }
-    #msg {
-      position: fixed; top:0; left:0; right:0;
-      padding:10px 12px;
-      font-family: Arial, system-ui;
-      background: rgba(0,0,0,0.6);
-      color:#fff; z-index: 10;
-    }
-    video { width:100%; height:100%; object-fit: cover; }
-    button {
-      position: fixed; bottom:16px; left:16px; z-index: 10;
-      padding:12px 14px; font-size:16px;
+    html, body { margin:0; height:100%; overflow:hidden; background:#000; }
+    #hud {
+      position: fixed; top: 10px; left: 10px; right: 10px;
+      z-index: 9999;
+      font-family: Arial, system-ui; font-size: 16px;
+      color: #fff; background: rgba(0,0,0,0.6);
+      padding: 10px 12px; border-radius: 10px;
     }
   </style>
 </head>
+
 <body>
-  <div id="msg">Tap “Start Camera”. If you get a prompt, tap Allow.</div>
-  <button id="btn">Start Camera</button>
-  <video id="v" playsinline autoplay muted></video>
+  <div id="hud">Loading… (When target is found, this will say FOUND ✅)</div>
+
+  <a-scene
+    mindar-image="imageTargetSrc: targets.mind; autoStart: true; uiScanning: true; uiLoading: true;"
+    embedded
+    renderer="colorManagement: true, physicallyCorrectLights: true"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: true">
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="marker" mindar-image-target="targetIndex: 0">
+      <!-- Big, impossible-to-miss cube + label -->
+      <a-box position="0 0 0" scale="0.6 0.6 0.6"></a-box>
+      <a-text value="FOUND ✅" position="0 0.6 0" align="center" width="4"></a-text>
+    </a-entity>
+  </a-scene>
 
   <script>
-    const msg = document.getElementById('msg');
-    const btn = document.getElementById('btn');
-    const video = document.getElementById('v');
+    const hud = document.getElementById("hud");
+    const marker = document.getElementById("marker");
 
-    async function start() {
-      try {
-        msg.textContent = "Requesting camera…";
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-          audio: false
-        });
-        video.srcObject = stream;
-        msg.textContent = "Camera is LIVE ✅";
-        btn.style.display = "none";
-      } catch (e) {
-        msg.textContent = "Camera FAILED ❌  " + (e && e.message ? e.message : e);
-      }
-    }
+    marker.addEventListener("targetFound", () => {
+      hud.textContent = "FOUND ✅ (keep the poster in view)";
+    });
 
-    btn.addEventListener('click', start);
+    marker.addEventListener("targetLost", () => {
+      hud.textContent = "LOST ❌ (move closer / reduce glare / keep whole poster visible)";
+    });
+
+    // Helpful: show if MindAR fails early
+    window.addEventListener("error", (e) => {
+      hud.textContent = "ERROR ❌ " + (e.message || e.type);
+    });
   </script>
 </body>
 </html>
