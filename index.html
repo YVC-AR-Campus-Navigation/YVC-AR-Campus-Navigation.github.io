@@ -190,4 +190,14 @@
       showCard();
 
       // If they already chose a destination, keep arrow visible when target is re-found
+      if (currentDest) navArrow.setAttribute("visible", true);
+    });
 
+    target0.addEventListener("targetLost", () => {
+      trackingStatus.textContent = "Looking for poster…";
+      // We do NOT auto-hide the UI so they can keep reading steps
+    });
+  </script>
+
+</body>
+</html>
