@@ -33,9 +33,9 @@
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity id="marker" mindar-image-target="targetIndex: 0">
-      <!-- Big, impossible-to-miss cube + label -->
-      <a-box position="0 0 0" scale="0.6 0.6 0.6"></a-box>
-      <a-text value="FOUND ✅" position="0 0.6 0" align="center" width="4"></a-text>
+      <!-- Less twitchy: smaller + slightly above the paper -->
+      <a-box position="0 0.15 0" scale="0.25 0.25 0.25"></a-box>
+      <a-text value="FOUND ✅" position="0 0.35 0" align="center" width="2"></a-text>
     </a-entity>
   </a-scene>
 
@@ -48,10 +48,9 @@
     });
 
     marker.addEventListener("targetLost", () => {
-      hud.textContent = "LOST ❌ (move closer / reduce glare / keep whole poster visible)";
+      hud.textContent = "LOST ❌ (move slower / reduce glare / keep whole poster visible)";
     });
 
-    // Helpful: show if MindAR fails early
     window.addEventListener("error", (e) => {
       hud.textContent = "ERROR ❌ " + (e.message || e.type);
     });
