@@ -14,7 +14,7 @@
 
 <body style="margin:0; overflow:hidden;">
 
-  <!-- ===== AR SCENE ===== -->
+  <!-- ================= AR SCENE ================= -->
   <a-scene
     mindar-image="imageTargetSrc: ./targets.mind;"
     color-space="sRGB"
@@ -22,30 +22,207 @@
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: true"
   >
+
     <a-assets></a-assets>
 
     <!-- Poster Target -->
     <a-entity id="target0" mindar-image-target="targetIndex: 0">
 
-      <!-- Navigation Arrow (hidden until a destination is picked) -->
-      <a-cone
-        id="navArrow"
-        position="0 0.25 0.03"
-        radius-bottom="0.10"
-        radius-top="0.001"
-        height="0.30"
-        color="yellow"
-        rotation="90 0 0"
-        visible="false">
-      </a-cone>
+      <!-- BIG FLOATING ARROW -->
+      <a-entity id="navArrow" position="0 0.25 0.15" visible="false">
+
+        <!-- Arrow Shaft -->
+        <a-cylinder
+          position="0 0 0"
+          radius="0.03"
+          height="0.25"
+          color="yellow">
+        </a-cylinder>
+
+        <!-- Arrow Head -->
+        <a-cone
+          position="0 0.18 0"
+          radius-bottom="0.08"
+          radius-top="0.001"
+          height="0.14"
+          color="yellow">
+        </a-cone>
+
+        <!-- Gentle floating animation -->
+        <a-animation
+          attribute="position"
+          dur="900"
+          direction="alternate"
+          repeat="indefinite"
+          to="0 0.35 0.15">
+        </a-animation>
+
+      </a-entity>
 
     </a-entity>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
   </a-scene>
 
-  <!-- ===== UI OVERLAY ===== -->
+  <!-- ================= UI OVERLAY ================= -->
   <div id="uiOverlay" style="
     position:fixed; left:0; top:0; right:0; bottom:0;
     display:flex; justify-content:center; align-items:flex-end;
-    padding:16
+    padding:16px; z-index:9999;
+    font-family:Arial; pointer-events:none;
+  ">
+    <div id="uiCard" style="
+      width:min(560px, 100%);
+      background:rgba(0,0,0,0.8);
+      color:white;
+      border-radius:16px;
+      padding:16px;
+      pointer-events:auto;
+      display:none;
+    ">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span id="trackingStatus">Looking for poster…</span>
+        <button id="btnClose">X</button>
+      </div>
+
+      <!-- HOME -->
+      <div id="screenHome">
+        <h3>Choose a destination</h3>
+        <button data-dest="library">Library</button>
+        <button data-dest="hub">HUB</button>
+        <button data-dest="bookstore">Bookstore</button>
+      </div>
+
+      <!-- ROUTE -->
+      <div id="screenRoute" style="display:none;">
+        <h3 id="routeTitle">Route</h3>
+        <div>
+          Step <span id="stepIndex">1</span> of <span id="stepTotal">1</span>
+        </div>
+        <div id="stepText" style="margin:10px 0;"></div>
+
+        <button id="btnBack">Back</button>
+        <button id="btnNext">Next</button>
+        <button id="btnHome">Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    const routes = {
+      library: [
+        "Walk straight down the hallway.",
+        "Turn left at the stairs.",
+        "Enter the Library."
+      ],
+      hub: [
+        "Walk forward.",
+        "Follow signs to HUB.",
+        "Enter the HUB."
+      ],
+      bookstore: [
+        "Walk forward.",
+        "Look for Bookstore signs.",
+        "Enter Bookstore."
+      ]
+    };
+
+    const uiCard = document.getElementById("uiCard");
+    const trackingStatus = document.getElementById("trackingStatus");
+
+    const screenHome = document.getElementById("screenHome");
+    const screenRoute = document.getElementById("screenRoute");
+
+    const routeTitle = document.getElementById("routeTitle");
+    const stepIndex = document.getElementById("stepIndex");
+    const stepTotal = document.getElementById("stepTotal");
+    const stepText = document.getElementById("stepText");
+
+    const btnBack = document.getElementById("btnBack");
+    const btnNext = document.getElementById("btnNext");
+    const btnHome = document.getElementById("btnHome");
+    const btnClose = document.getElementById("btnClose");
+
+    const navArrow = document.getElementById("navArrow");
+    const target0 = document.getElementById("target0");
+
+    let currentDest = null;
+    let currentStep = 0;
+
+    function showCard() {
+      uiCard.style.display = "block";
+    }
+
+    function hideCard() {
+      uiCard.style.display = "none";
+    }
+
+    function showHome() {
+      screenHome.style.display = "block";
+      screenRoute.style.display = "none";
+      navArrow.setAttribute("visible", false);
+      currentDest = null;
+      currentStep = 0;
+    }
+
+    function showRoute() {
+      screenHome.style.display = "none";
+      screenRoute.style.display = "block";
+    }
+
+    function loadDest(dest) {
+      currentDest = dest;
+      currentStep = 0;
+
+      navArrow.setAttribute("visible", true);
+
+      routeTitle.textContent = dest.toUpperCase();
+      stepTotal.textContent = routes[dest].length;
+      renderStep();
+      showRoute();
+    }
+
+    function renderStep() {
+      stepIndex.textContent = currentStep + 1;
+      stepText.textContent = routes[currentDest][currentStep];
+      btnBack.disabled = currentStep === 0;
+      btnNext.textContent =
+        currentStep === routes[currentDest].length - 1 ? "Done" : "Next";
+    }
+
+    document.querySelectorAll("[data-dest]").forEach(btn => {
+      btn.addEventListener("click", () => loadDest(btn.dataset.dest));
+    });
+
+    btnBack.addEventListener("click", () => {
+      if (currentStep > 0) {
+        currentStep--;
+        renderStep();
+      }
+    });
+
+    btnNext.addEventListener("click", () => {
+      if (currentStep < routes[currentDest].length - 1) {
+        currentStep++;
+        renderStep();
+      } else {
+        showHome();
+      }
+    });
+
+    btnHome.addEventListener("click", showHome);
+    btnClose.addEventListener("click", hideCard);
+
+    target0.addEventListener("targetFound", () => {
+      trackingStatus.textContent = "Poster detected ✅";
+      showCard();
+    });
+
+    target0.addEventListener("targetLost", () => {
+      trackingStatus.textContent = "Looking for poster…";
+    });
+  </script>
+
+</body>
+</html>
