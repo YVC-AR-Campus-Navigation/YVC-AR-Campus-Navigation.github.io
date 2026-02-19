@@ -122,6 +122,11 @@
         "Enter Bookstore."
       ]
     };
+const arrowDirections = {
+  library: ["forward", "left", "forward"],
+  hub: ["forward", "right", "forward"],
+  bookstore: ["forward", "forward", "left"]
+};
 
     const uiCard = document.getElementById("uiCard");
     const trackingStatus = document.getElementById("trackingStatus");
@@ -165,6 +170,12 @@
       screenHome.style.display = "none";
       screenRoute.style.display = "block";
     }
+function setArrowDirection(dir) {
+  if (dir === "forward") navArrow.setAttribute("rotation", "0 0 0");
+  if (dir === "left")    navArrow.setAttribute("rotation", "0 0 90");
+  if (dir === "right")   navArrow.setAttribute("rotation", "0 0 -90");
+  if (dir === "back")    navArrow.setAttribute("rotation", "0 0 180");
+}
 
     function loadDest(dest) {
       currentDest = dest;
@@ -181,6 +192,9 @@
     function renderStep() {
       stepIndex.textContent = currentStep + 1;
       stepText.textContent = routes[currentDest][currentStep];
+      const dir = (arrowDirections[currentDest] || [])[currentStep] || "forward";
+setArrowDirection(dir);
+
       btnBack.disabled = currentStep === 0;
       btnNext.textContent =
         currentStep === routes[currentDest].length - 1 ? "Done" : "Next";
