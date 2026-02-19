@@ -28,36 +28,17 @@
     <!-- Poster Target -->
     <a-entity id="target0" mindar-image-target="targetIndex: 0">
 
-      <!-- BIG FLOATING ARROW -->
-      <a-entity id="navArrow" position="0 0.35 -0.25" visible="false">
+    <a-entity id="navArrow" position="0 0 0" visible="false">
+  <a-plane
+    width="0.5"
+    height="0.5"
+    color="lime"
+    material="shader: flat">
+  </a-plane>
+</a-entity>
 
-        <!-- Arrow Shaft -->
-        <a-cylinder
-          position="0 0 0"
-          radius="0.03"
-          height="0.25"
-          color="yellow">
-        </a-cylinder>
 
-        <!-- Arrow Head -->
-        <a-cone
-          position="0 0.18 0"
-          radius-bottom="0.08"
-          radius-top="0.001"
-          height="0.14"
-          color="yellow">
-        </a-cone>
 
-        <!-- Gentle floating animation -->
-        <a-animation
-          attribute="position"
-          dur="900"
-          direction="alternate"
-          repeat="indefinite"
-          to="0 0.45 -0.25">
-        </a-animation>
-
-      </a-entity>
 
     </a-entity>
 
