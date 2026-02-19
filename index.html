@@ -135,6 +135,7 @@
     function loadDest(dest) {
       currentDest = dest;
       currentStep = 0;
+      document.getElementById("navCube").setAttribute("visible", false);
       routeTitle.textContent = dest.toUpperCase();
       stepTotal.textContent = routes[dest].length;
       renderStep();
