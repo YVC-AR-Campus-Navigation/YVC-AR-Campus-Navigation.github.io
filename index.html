@@ -28,14 +28,28 @@
     <!-- Poster Target -->
     <a-entity id="target0" mindar-image-target="targetIndex: 0">
 
-    <a-entity id="navArrow" position="0 0 0" visible="false">
-  <a-plane
-    width="0.5"
-    height="0.5"
-    color="lime"
-    material="shader: flat">
-  </a-plane>
+   <a-entity id="navArrow" position="0 0 0" visible="false">
+
+  <!-- Shaft -->
+  <a-box
+    position="0 0.12 0"
+    width="0.08"
+    height="0.24"
+    depth="0.02"
+    material="shader: flat; color: yellow">
+  </a-box>
+
+  <!-- Head -->
+  <a-cone
+    position="0 0.28 0"
+    radius-bottom="0.10"
+    radius-top="0.001"
+    height="0.16"
+    material="shader: flat; color: yellow">
+  </a-cone>
+
 </a-entity>
+
 
 
 
