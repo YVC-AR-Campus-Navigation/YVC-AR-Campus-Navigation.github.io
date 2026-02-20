@@ -106,22 +106,24 @@
   <!-- ================= JAVASCRIPT ================= -->
   <script>
     const routes = {
-      library: [
-        "Walk straight down the hallway.",
-        "Turn left at the stairs.",
-        "Enter the Library."
-      ],
-      hub: [
-        "Walk forward.",
-        "Follow signs to HUB.",
-        "Enter the HUB."
-      ],
-      bookstore: [
-        "Walk forward.",
-        "Look for Bookstore signs.",
-        "Enter Bookstore."
-      ]
-    };
+  library: [
+    { text: "Walk straight down the hallway.", landmark: "Main hallway" },
+    { text: "Turn left at the stairs.", landmark: "Stairwell" },
+    { text: "Enter the Library.", landmark: "Library entrance" }
+  ],
+
+  hub: [
+    { text: "Walk forward.", landmark: "Main hallway" },
+    { text: "Follow signs to HUB.", landmark: "HUB sign" },
+    { text: "Enter the HUB.", landmark: "HUB entrance" }
+  ],
+
+  bookstore: [
+    { text: "Walk forward.", landmark: "Main corridor" },
+    { text: "Look for Bookstore signs.", landmark: "Bookstore sign" },
+    { text: "Enter Bookstore.", landmark: "Bookstore entrance" }
+  ]
+};
 const arrowDirections = {
   library: ["forward", "left", "forward"],
   hub: ["forward", "right", "forward"],
