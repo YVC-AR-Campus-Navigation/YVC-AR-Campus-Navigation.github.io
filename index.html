@@ -122,24 +122,28 @@
   <!-- ================= JAVASCRIPT ================= -->
   <script>
     const routes = {
-  library: [
+    library: [
     { text: "Walk straight down the hallway.", landmark: "Main hallway" },
     { text: "Turn left at the stairs.", landmark: "Stairwell" },
     { text: "Enter the Library.", landmark: "Library entrance" }
   ],
 
- 
-
   bookstore: [
-    { text: "Walk forward.", landmark: "Main corridor" },
-    { text: "Look for Bookstore signs.", landmark: "Bookstore sign" },
-    { text: "Enter Bookstore.", landmark: "Bookstore entrance" }
+    { text: "Turn RIGHT away from the Library desk.", landmark: "Library desk and flyer" },
+    { text: "Walk straight and exit through the first door.", landmark: "First library door" },
+    { text: "Continue forward and exit through the second door.", landmark: "Second library door (library exit)" },
+    { text: "Veer slightly LEFT and walk toward the HUB building.", landmark: "HUB building ahead" },
+    { text: "Enter through the sliding double doors.", landmark: "HUB sliding double doors" },
+    { text: "Walk straight down the HUB hallway.", landmark: "Interior HUB hallway" },
+    { text: "Look to your LEFT for the white brick square column.", landmark: "White brick square column" },
+    { text: "Arrived — the Bookstore entrance is next to the white brick column.", landmark: "Bookstore entrance doors" }
   ]
+};
 };
 const arrowDirections = {
   library: ["forward", "left", "forward"],
  
-  bookstore: ["forward", "forward", "left"]
+ bookstore: ["right", "forward", "forward", "left", "forward", "forward", "forward", "forward"]
 };
 
     const uiCard = document.getElementById("uiCard");
