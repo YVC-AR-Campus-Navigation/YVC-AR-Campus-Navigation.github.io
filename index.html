@@ -10,6 +10,22 @@
 
   <!-- MindAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.4/dist/mindar-image-aframe.prod.js"></script>
+  <style>
+.landmark{
+  font-size: 0.9em;
+  opacity: 0.75;
+  margin-top: 6px;
+}
+
+.stepFlash{
+  animation: stepFlash 0.18s ease-in-out;
+}
+
+@keyframes stepFlash{
+  from { transform: scale(0.985); opacity: 0.6; }
+  to   { transform: scale(1);     opacity: 1; }
+}
+</style>
 </head>
 
 <body style="margin:0; overflow:hidden;">
@@ -196,12 +212,15 @@ function setArrowDirection(dir) {
      const stepObj = routes[currentDest][currentStep];
 stepText.textContent = stepObj.text;
 landmarkText.textContent = "Landmark: " + stepObj.landmark;
+      screenRoute.classList.remove("stepFlash");
+void screenRoute.offsetWidth;
+screenRoute.classList.add("stepFlash");
       const dir = (arrowDirections[currentDest] || [])[currentStep] || "forward";
 setArrowDirection(dir);
 
       btnBack.disabled = currentStep === 0;
-      btnNext.textContent =
-        currentStep === routes[currentDest].length - 1 ? "Done" : "Next";
+     btnNext.textContent =
+  currentStep === routes[currentDest].length - 1 ? "Arrived" : "I’m Here";
     }
 
     document.querySelectorAll("[data-dest]").forEach(btn => {
