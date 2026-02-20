@@ -215,6 +215,7 @@ landmarkText.textContent = "Landmark: " + stepObj.landmark;
       screenRoute.classList.remove("stepFlash");
 void screenRoute.offsetWidth;
 screenRoute.classList.add("stepFlash");
+      if (navigator.vibrate) navigator.vibrate(25);
       const dir = (arrowDirections[currentDest] || [])[currentStep] || "forward";
 setArrowDirection(dir);
 
