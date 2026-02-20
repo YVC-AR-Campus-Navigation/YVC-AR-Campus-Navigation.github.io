@@ -193,7 +193,9 @@ function setArrowDirection(dir) {
 
     function renderStep() {
       stepIndex.textContent = currentStep + 1;
-      stepText.textContent = routes[currentDest][currentStep];
+     const stepObj = routes[currentDest][currentStep];
+stepText.textContent = stepObj.text;
+landmarkText.textContent = "Landmark: " + stepObj.landmark;
       const dir = (arrowDirections[currentDest] || [])[currentStep] || "forward";
 setArrowDirection(dir);
 
